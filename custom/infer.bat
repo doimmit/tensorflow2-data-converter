@@ -1,0 +1,2 @@
+nohup python ../model_main_tf2_petopia.py --best_ckpt=ckpt-71 --train_path=/home/petopia-01/git/models/research/object_detection/petopia/train/0928 --test_data_dir=/home/petopia-01/git/models/research/object_detection/petopia/data/0928/test --inference_only=True --alsologtostderr &> nohup_logs/$(date "+%m%d_%H%M")_infer.out &
+tail -f nohup_logs/$(date "+%m%d_%H%M")_infer.out
