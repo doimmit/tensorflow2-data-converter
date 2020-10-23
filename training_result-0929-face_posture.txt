@@ -1,0 +1,80 @@
+[0929-1] [학습조건]
+- peeing_female: eastrain
+- 특이사항 : 0928이랑 모두 동일하고, posture class 만 학습
+- batch_size : 16
+- steps : 100000
+- data augmentation, data 현황 - 0928랑 똑같이
+label
+fourlegs
+twolegs
+sit
+kneel
+playbow
+headdown
+peeing_male
+peeing_female
+peeing_standing
+pooping
+lay_belly
+lay_curled
+lay_side
+lay_sprawled
+scratching_face
+- 학습결과(best: ckpt-77)
+CUSTOM/mAP: 72.99310194384837
+PascalBoxes_Precision/mAP@0.5IOU: 61.80049819305044
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/fourlegs: 78.50772128687122
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/twolegs: 14.285204991087344
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/sit: 81.76198179265022
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/kneel: 89.00904180919845
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/playbow: 13.333333333333334
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/headdown: 67.37740995878099
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/peeing_male: 81.71065685207705
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/peeing_female: 66.4132521432809
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/peeing_standing: 10.421205519244735
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/pooping: 84.83665347745917
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/lay_belly: 68.50148194804878
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/lay_curled: 74.40497248427673
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/lay_side: 56.54940126001715
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/lay_sprawled: 53.8515483696713
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/scratching_face: 86.04360766975915
+Loss/localization_loss: 0.03544735163450241
+Loss/classification_loss: 0.36832764744758606
+Loss/regularization_loss: 0.07702606916427612
+Loss/total_loss: 0.4808003902435303
+
+
+[0929-2] [학습조건]
+- peeing_female: eastrain
+- 특이사항 : 0928이랑 모두 동일하고, face class 만 학습
+- batch_size : 16
+- steps : 100000
+- data augmentation, data 현황 - 0928랑 똑같이
+label
+face_none
+mouth_open
+mouth_close
+eating_mouth
+eating_bowl
+eating_hide
+eating_etc
+licking
+sleeping
+yawning
+- 학습결과(best: ckpt-92)
+CUSTOM/mAP: 73.76054591868835
+PascalBoxes_Precision/mAP@0.5IOU: 64.53422439015858
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/face_none: 39.05431499985571
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/mouth_open: 72.453859631148
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/mouth_close: 82.37874460268645
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/eating_mouth: 65.6796126542182
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/eating_bowl: 93.68655395373449
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/eating_hide: 60.24874959961848
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/eating_etc: 16.203561552223366
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/licking: 79.37617519571208
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/sleeping: 44.24346400126135
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/yawning: 92.01720771112775
+Loss/localization_loss: 0.08585833758115768
+Loss/classification_loss: 0.38381966948509216
+Loss/regularization_loss: 0.07500176131725311
+Loss/total_loss: 0.5446802377700806

@@ -1,0 +1,105 @@
+[0928] [학습조건]
+- peeing_female: eastrain
+- 특이사항 : mouth_close 개수 그대로 (3980개)
+- batch_size : 16
+- steps : 100000
+- data augmentation - 0922랑 똑같이
+- data 현황
+{
+  "allObjectDetectionCsvCount": 9139,
+  "allKeyPointDetectionCsvCount": 4365,
+  "objectDetectionStatics": {
+    "postureCount": 9599,
+    "faceCount": 9599,
+    "objectCount": 3102,
+    "posture": {
+      "null": 0,
+      "scratching_face": 794,
+      "peeing_female": 661,
+      "peeing_female_etc": 0,
+      "posture_none": 1559,
+      "fourlegs": 1178,
+      "twolegs": 50,
+      "sit": 775,
+      "kneel": 1201,
+      "playbow": 34,
+      "headdown": 742,
+      "peeing_male": 688,
+      "peeing_standing": 44,
+      "pooping": 806,
+      "lay_belly": 288,
+      "lay_curled": 232,
+      "lay_side": 264,
+      "lay_sprawled": 283
+    },
+    "face": {
+      "null": 188,
+      "mouth_close": 3980,
+      "face_none": 981,
+      "mouth_open": 1158,
+      "eating_mouth": 460,
+      "eating_bowl": 726,
+      "eating_hide": 552,
+      "eating_etc": 76,
+      "licking": 305,
+      "sleeping": 428,
+      "yawning": 745
+    },
+    "object": {
+      "bowl": 1100,
+      "feed": 648,
+      "pad": 190,
+      "toilet": 354,
+      "poop": 326,
+      "pee": 128,
+      "gum": 219,
+      "toy": 23,
+      "ball": 63,
+      "doll": 46,
+      "cushion": 5
+    }
+  },
+  
+- 학습결과 (best: ckpt-71)
+CUSTOM/mAP: 67.7341635698761
+PascalBoxes_Precision/mAP@0.5IOU: 52.549923549378285
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/fourlegs: 79.07693732974266
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/twolegs: 30.0
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/sit: 79.33364362442849
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/kneel: 86.8553921289811
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/playbow: 26.5625
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/headdown: 67.4548284905101
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/peeing_male: 78.550114343801
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/peeing_female: 66.67100346357105
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/peeing_standing: 43.1025641025641
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/pooping: 86.39765897417048
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/lay_belly: 83.61722200842058
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/lay_curled: 75.96490295374633
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/lay_side: 45.2747010110769
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/lay_sprawled: 46.97214932344285
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/scratching_face: 91.35386909026829
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/face_none: 32.40965075351039
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/mouth_open: 73.8042618328811
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/mouth_close: 82.45637479941144
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/eating_mouth: 67.17027545880812
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/eating_bowl: 92.41113503923738
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/eating_hide: 59.07043686193886
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/eating_etc: 4.88580529425438
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/licking: 75.56581070672104
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/sleeping: 49.61351572276425
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/yawning: 94.23085265951262
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/bowl: 74.4966111024847
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/feed: 19.965820080354405
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/pad: 27.872034759088994
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/toilet: 45.0600794320558
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/poop: 5.494636023310049
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/pee: 35.85262513398109
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/gum: 36.957112263519164
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/toy: 6.826904864451416
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/ball: 12.495001158501697
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/doll: 7.914700263323926
+PascalBoxes_PerformanceByCategory/AP@0.5IOU/cushion: 0.056116722783389444
+Loss/localization_loss: 0.09878183156251907
+Loss/classification_loss: 0.364949494600296
+Loss/regularization_loss: 0.06940566748380661
+Loss/total_loss: 0.5331375002861023
