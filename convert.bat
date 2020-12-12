@@ -1,0 +1,1 @@
+pyhon ./convert_dataset.py --train_dir=./train --data_dir=./data --pretrained_dir=./pretrained/efficientdet_d0_coco17_tpu-32 --alsologtostderr

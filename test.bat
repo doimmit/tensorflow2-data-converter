@@ -1,0 +1,1 @@
+python ./model_main_tf2_custom.py --best_ckpt=ckpt-101 --train_path=./train --test_data_dir=./data/test --inference_only=True --alsologtostderr

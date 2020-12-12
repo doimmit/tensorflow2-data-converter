@@ -61,13 +61,13 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 # 2 = INFO and WARNING messages are not printed
 # 3 = INFO, WARNING, and ERROR messages are not printed
 
-gpus = tf.config.experimental.list_physical_devices('GPU')
-tf.config.experimental.set_memory_growth(gpus[0], True)
-tf.config.experimental.set_virtual_device_configuration(gpus[0], [
-    tf.config.experimental.VirtualDeviceConfiguration(memory_limit=9500)])
-tf.config.experimental.set_memory_growth(gpus[1], True)
-tf.config.experimental.set_virtual_device_configuration(gpus[1], [
-    tf.config.experimental.VirtualDeviceConfiguration(memory_limit=9500)])
+# gpus = tf.config.experimental.list_physical_devices('GPU')
+# tf.config.experimental.set_memory_growth(gpus[0], True)
+# tf.config.experimental.set_virtual_device_configuration(gpus[0], [
+#     tf.config.experimental.VirtualDeviceConfiguration(memory_limit=9500)])
+# tf.config.experimental.set_memory_growth(gpus[1], True)
+# tf.config.experimental.set_virtual_device_configuration(gpus[1], [
+#     tf.config.experimental.VirtualDeviceConfiguration(memory_limit=9500)])
 
 flags.DEFINE_string('train_path', None, 'Path to config '
                                         'file.')
@@ -75,7 +75,6 @@ flags.DEFINE_string('test_data_dir', None, '')
 flags.DEFINE_string('best_ckpt', None, '')
 flags.DEFINE_bool('eval_only', False, 'eval_only')
 flags.DEFINE_bool('inference_only', False, 'inference_only')
-flags.DEFINE_bool('inference_video', False, 'inference_only')
 flags.DEFINE_string('pipeline_config_path', None, 'Path to pipeline config '
                                                   'file.')
 flags.DEFINE_integer('num_train_steps', None, 'Number of train steps.')
@@ -130,20 +129,12 @@ def main(unused_argv):
         if FLAGS.test_data_dir is None:
             print('Cannot inference images. Please input test_data_dir value.')
         else:
-            inference_image(pipeline_config_path, os.path.join(model_dir, best_ckpt), label_map_path,
+            test(pipeline_config_path, os.path.join(model_dir, best_ckpt), label_map_path,
                             FLAGS.test_data_dir,
-                            os.path.join(FLAGS.train_path, 'model', f'inference_image_{best_ckpt}'))
-    elif FLAGS.inference_video:
-        best_ckpt, checkpoint_list = get_best_ckpt(model_dir, FLAGS.best_ckpt)
-        if FLAGS.test_data_dir is None:
-            print('Cannot inference video. Please input test_data_dir value.')
-        else:
-            inference_video(pipeline_config_path, os.path.join(model_dir, best_ckpt), label_map_path,
-                            FLAGS.test_data_dir,
-                            os.path.join(FLAGS.train_path, 'model', f'inference_video_{best_ckpt}'))
+                            os.path.join(FLAGS.train_path, 'model', f'test_{best_ckpt}'))
     elif FLAGS.eval_only:
         best_ckpt, checkpoint_list = get_best_ckpt(model_dir, FLAGS.best_ckpt)
-        eval_petopia(pipeline_config_path, model_dir, checkpoint_list)
+        evaluate(pipeline_config_path, model_dir, checkpoint_list)
     else:
         if FLAGS.use_tpu:
             # TPU is automatically inferred if tpu_name is None and
@@ -169,8 +160,8 @@ def main(unused_argv):
                 checkpoint_max_to_keep=400)
 
         best_ckpt, checkpoint_list = get_best_ckpt(model_dir, FLAGS.best_ckpt)
-        eval_petopia(pipeline_config_path, model_dir, checkpoint_list)
-    print("!!!!!!!! Done !!!!!!!!")
+        evaluate(pipeline_config_path, model_dir, checkpoint_list)
+    print("Done")
 
 
 def get_best_ckpt(model_dir, best_ckpt=None):
@@ -193,7 +184,7 @@ def get_best_ckpt(model_dir, best_ckpt=None):
     return best_ckpt, checkpoint_list
 
 
-def eval_petopia(pipeline_config_path, model_dir, checkpoint_list):
+def evaluate(pipeline_config_path, model_dir, checkpoint_list):
     eval_metrics_dir = os.path.join(os.path.dirname(checkpoint_list[0]),
                                     f'eval_metrics_{datetime.now().strftime("%m%d_%H%M")}')
     Path(eval_metrics_dir).mkdir(parents=True, exist_ok=True)
@@ -207,14 +198,7 @@ def eval_petopia(pipeline_config_path, model_dir, checkpoint_list):
                 FLAGS.sample_1_of_n_eval_on_train_examples),
             checkpoint_dir=checkpoint_dir,
             eval_metrics_dir=eval_metrics_dir,
-            wait_interval=300, timeout=FLAGS.eval_timeout,
-            custom_list={'peeing_female': ['peeing_female', 'peeing_female_etc'],
-                         'peeing_female_etc': ['peeing_female', 'peeing_female_etc']},
-            custom_map_list=['fourlegs', 'sit', 'kneel', 'headdown', 'peeing_male', 'peeing_female', 'pooping',
-                             'lay_belly',
-                             'lay_curled', 'lay_side', 'lay_sprawled', 'mouth_open', 'mouth_close', 'eating_mouth',
-                             'eating_bowl',
-                             'eating_hide', 'licking', 'yawning', 'sleeping', 'bowl', 'feed', 'pad', 'toilet'])
+            wait_interval=300, timeout=FLAGS.eval_timeout)
 
 
 def get_all_image_files(path):
@@ -284,100 +268,7 @@ def detect_fn(model, image):
     return detections, prediction_dict, tf.reshape(shapes, [-1])
 
 
-def inference_video(pipeline_config_path, model_dir, label_map_path, test_data_dir, inference_dir):
-    # all_video = get_all_video_files(test_data_dir)
-    #
-    # for video_path in all_video:
-
-    video_path = "/home/petopia-02/mnt/inference_video/0924/MD_20200421132714_peeing.mp4"
-    # MD_20200330174329_pooping.mp4
-    # MD_20200330123235_scratching.mp4
-    # hard_pooping.mp4
-    # yawning_2.mp4
-    # peeing_male_1.mp4
-    # eating_bowl_1.mp4
-    # 9221031-eating_bowl.mp4
-    output_path = os.path.join(inference_dir, f'{os.path.splitext(os.path.basename(video_path))[0]}_out_.avi')
-    Path(inference_dir).mkdir(parents=True, exist_ok=True)
-
-    configs = config_util.get_configs_from_pipeline_file(pipeline_config_path)
-    model_config = configs['model']
-
-    detection_model = model_builder.build(
-        model_config=model_config, is_training=False)
-    ckpt = tf.compat.v2.train.Checkpoint(
-        model=detection_model)
-    ckpt.restore(model_dir)
-
-    label_map = label_map_util.load_labelmap(label_map_path)
-    categories = label_map_util.convert_label_map_to_categories(
-        label_map,
-        max_num_classes=label_map_util.get_max_label_map_index(label_map),
-        use_display_name=True)
-    category_index = label_map_util.create_category_index(categories)
-
-    cap = cv2.VideoCapture(video_path)
-    fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    out = cv2.VideoWriter(output_path, fourcc, float(cap.get(5)), (int(cap.get(3)), int(cap.get(4))))
-
-    try:
-        frame_count = 0
-        print(f'video : {str(video_path)}')
-        while (cap.isOpened()):
-            ret, frame = cap.read()
-            if ret == True:
-                frame_count += 1
-                image_np = load_capture_image_into_numpy_array(frame)
-                input_tensor = tf.convert_to_tensor(
-                    np.expand_dims(image_np, 0), dtype=tf.float32)
-                detections, predictions_dict, shapes = detect_fn(detection_model, input_tensor)
-
-                boxes = detections['detection_boxes'][0].numpy()
-                classes = (detections['detection_classes'][0].numpy() + 1).astype(int)
-                scores = detections['detection_scores'][0].numpy()
-                display_str = f'-- frame : {str(frame_count)}'
-                for i in range(boxes.shape[0]):
-                    score = round(100 * scores[i])
-                    if score >= 50:
-                        display_str = f'{display_str} / {category_index[classes[i]]["name"]}: {str(round(100 * scores[i]))}% '
-
-                # print(display_str)
-
-                viz_utils.visualize_boxes_and_labels_on_image_array(
-                    image_np,
-                    detections['detection_boxes'][0].numpy(),
-                    (detections['detection_classes'][0].numpy() + 1).astype(int),
-                    detections['detection_scores'][0].numpy(),
-                    category_index,
-                    use_normalized_coordinates=True,
-                    max_boxes_to_draw=200,
-                    min_score_thresh=.5,
-                    agnostic_mode=False,
-                    line_thickness=10
-                )
-
-                out.write(image_np)
-                # save_img = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
-                # Path(os.path.join(inference_dir, os.path.splitext(os.path.basename(video_path))[0])).mkdir(parents=True, exist_ok=True)
-                # cv2.imwrite(os.path.join(inference_dir, os.path.splitext(os.path.basename(video_path))[0], f'{str(frame_count)}.jpg'), save_img)
-
-                if frame_count > 3000:
-                    break
-                # cv2.imshow('frame',image_np)
-                # if cv2.waitKey(1) & 0xFF == ord('q'):
-                #     break
-
-        # Release everything if job is finished
-        print('releasing objects...')
-        cap.release()
-        out.release()
-        print('Done!!!!!!!')
-        # cv2.destroyAllWindows()
-    except Exception as e:
-        print(f'### Exception : {str(e)}')
-
-
-def inference_image(pipeline_config_path, model_dir, label_map_path, test_data_dir, inference_dir):
+def test(pipeline_config_path, model_dir, label_map_path, test_data_dir, inference_dir):
     Path(inference_dir).mkdir(parents=True, exist_ok=True)
 
     configs = config_util.get_configs_from_pipeline_file(pipeline_config_path)

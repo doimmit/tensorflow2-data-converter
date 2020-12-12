@@ -1,2 +1,0 @@
-nohup python ../model_main_tf2_petopia.py --train_path=/home/petopia-01/git/models/research/object_detection/petopia/train/0929_posture --test_data_dir=/home/petopia-01/git/models/research/object_detection/petopia/data/0928/test --alsologtostderr &> nohup_logs/$(date "+%m%d_%H%M")_train_posture.out &
-tail -f nohup_logs/$(date "+%m%d_%H%M")_train_posture.out

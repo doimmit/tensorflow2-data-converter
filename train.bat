@@ -1,0 +1,1 @@
+pyhon ../model_main_tf2_custom.py --train_path=./train/ --test_data_dir=./data/test --alsologtostderr
